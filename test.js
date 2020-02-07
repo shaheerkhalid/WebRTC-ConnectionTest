@@ -34,19 +34,27 @@ function checkTurnOrStun(turnConfig, timeout){
     });   
   }
   
-//   checkTurnOrStun({"url": "stun:stunserver.org"}).then(function(result){
-//       console.log(
-//       result ? 'YES, Server active as '+result : 'NO, server not active');
-//   }).catch(console.error.bind(console));
+  checkTurnOrStun({"url": "stun:bturn2.xirsys.com"}).then(function(result){
+      console.log(
+      result ? 'YES, Server active as '+result : 'NO, server not active');
+  }).catch(console.error.bind(console));
   
-  checkTURNServer({
-    url: 'stun:bturn2.xirsys.com',
-    username: 'ymms7Hxn1MyMr0YO5S3MM5BkwgARPkN6TxQOZiXRfrsFK2lRGQbLK8Qt4DHlGry7AAAAAF49v1hzaGFoZWVya2hhbGlk',
-    credential: 'fd212486-49e2-11ea-8456-9646de0e6ccd'
-}).then(function(result){
+  checkTurnOrStun({
+              url: 'turn:bturn2.xirsys.com:80?transport=udp',
+              username: 'ymms7Hxn1MyMr0YO5S3MM5BkwgARPkN6TxQOZiXRfrsFK2lRGQbLK8Qt4DHlGry7AAAAAF49v1hzaGFoZWVya2hhbGlk',
+              credential: 'fd212486-49e2-11ea-8456-9646de0e6ccd'
+  }).then(function(result){
       console.log(
       result ? 'YES, Server active as '+result : 'NO, server not active');
   }).catch(console.error.bind(console));
 
 
 
+
+//   checkTURNServer({
+//     url: 'stun:bturn2.xirsys.com',
+//     username: 'ymms7Hxn1MyMr0YO5S3MM5BkwgARPkN6TxQOZiXRfrsFK2lRGQbLK8Qt4DHlGry7AAAAAF49v1hzaGFoZWVya2hhbGlk',
+//     credential: 'fd212486-49e2-11ea-8456-9646de0e6ccd'
+// }).then(function(bool){
+//     console.log('is TURN server active? ', bool? 'yes':'no');
+// }).catch(console.error.bind(console));
