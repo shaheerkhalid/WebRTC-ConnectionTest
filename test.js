@@ -1,70 +1,60 @@
+function checkTurnOrStun(turnConfig, timeout){ 
+    return new Promise(function(resolve, reject){
+  
+      setTimeout(function(){
+          if(promiseResolved){
+              if (promiseResolved == 'STUN') resolve('STUN');
+              return;
+          }
+          resolve(false);
+          promiseResolved = true;
+      }, timeout || 5000);
+  
+      var promiseResolved = false
+        , myPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection   //compatibility for firefox and chrome
+        , pc = new myPeerConnection({iceServers:[turnConfig]})
+        , noop = function(){};
+      pc.createDataChannel("");    //create a bogus data channel
+      pc.createOffer(function(sdp){
+        if(sdp.sdp.indexOf('typ relay') > -1){ // sometimes sdp contains the ice candidates...
+          promiseResolved = 'TURN'; 
+          resolve(true);
+        }
+        pc.setLocalDescription(sdp, noop, noop);
+      }, noop);    // create offer and set local description
+      pc.onicecandidate = function(ice){  //listen for candidate events
+        if( !ice || !ice.candidate || !ice.candidate.candidate)  return;
+        if (ice.candidate.candidate.indexOf('typ relay')!=-1) { promiseResolved = 'TURN'; resolve('TURN'); }
+        else if (!promiseResolved && (ice.candidate.candidate.indexOf('typ prflx')!=-1 || ice.candidate.candidate.indexOf('typ srflx')!=-1)){
+            promiseResolved = 'STUN';
+          if (turnConfig.url.indexOf('turn:')!==0) resolve('STUN');
+        }
+        else return;
+      };
+    });   
+  }
+  
+  checkTurnOrStun({"url": "stun:stunserver.org"}).then(function(result){
+      console.log(
+      result ? 'YES, Server active as '+result : 'NO, server not active');
+  }).catch(console.error.bind(console));
+  
+  checkTurnOrStun({
+              url: 'turn:numb.viagenie.ca',
+              credential: 'muazkh',
+              username: 'webrtc@live.com'
+  }).then(function(result){
+      console.log(
+      result ? 'YES, Server active as '+result : 'NO, server not active');
+  }).catch(console.error.bind(console));
 
-// if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-//     console.log('getUserMedia supported.');
-//     navigator.mediaDevices.getUserMedia (
-//        {
-//             video: true,
-//             audio: true
-         
-//        })
- 
-//        // Success callback
-//        .then(function(stream) {
-//             const mediaRecorder = new MediaRecorder(stream);
-//             mediaRecorder.start();
-//             mediaRecorder.stop();
-
-//             pc = new RTCPeerConnection()
-//        })
- 
-//        // Error callback
-//        .catch(function(err) {
-//           console.log('The following getUserMedia error occured: ' + err);
-//        }
-//     );
-//  } else {
-//     console.log('getUserMedia not supported on your browser!');
-//  }
 
 
 
-//  navigator.getUserMedia({video: false,audio: true}, function(stream) {
-//     const mediaRecorder = new MediaRecorder(stream);
-//     mediaRecorder.start();
-//     mediaRecorder.stop();
-// }, function(err) { alert("there was an error " + err)});
-
-
-
-
-// const signaling = new SignalingChannel();
-const constraints = {audio: true, video: true};
-const configuration = {iceServers: [{
-    urls: [ "stun:bturn2.xirsys.com" ]
- }, {
-    username: "CrdmfPFuQZrLKm1iJyFv-xHJUSci3WJ3nut3onfHamEg1hMFtOraLgngdOFxWhlWAAAAAF49kYZzaGFoZWVya2hhbGlk",
-    credential: "ad928fa6-49c7-11ea-9cce-9646de0e6ccd",
-    urls: [
-        "turn:bturn2.xirsys.com:80?transport=udp",
-        "turn:bturn2.xirsys.com:3478?transport=udp",
-        "turn:bturn2.xirsys.com:80?transport=tcp",
-        "turn:bturn2.xirsys.com:3478?transport=tcp",
-        "turns:bturn2.xirsys.com:443?transport=tcp",
-        "turns:bturn2.xirsys.com:5349?transport=tcp"
-    ]
- }]};
-const pc = new RTCPeerConnection(configuration);
-
-// send any ice candidates to the other peer
-// pc.onicecandidate = ({candidate}) => signaling.send({candidate});
-console.log(pc.getStats());
-// // let the "negotiationneeded" event trigger offer generation
-// pc.onnegotiationneeded = async () => {
-//   try {
-//     await pc.setLocalDescription(await pc.createOffer());
-//     // send the offer to the other peer
-//     signaling.send({desc: pc.localDescription});
-//   } catch (err) {
-//     console.error(err);
-//   }
-// };
+  checkTURNServer({
+    url: 'stun:bturn2.xirsys.com',
+    username: 'ymms7Hxn1MyMr0YO5S3MM5BkwgARPkN6TxQOZiXRfrsFK2lRGQbLK8Qt4DHlGry7AAAAAF49v1hzaGFoZWVya2hhbGlk',
+    credential: 'fd212486-49e2-11ea-8456-9646de0e6ccd'
+}).then(function(bool){
+    console.log('is TURN server active? ', bool? 'yes':'no');
+}).catch(console.error.bind(console));
