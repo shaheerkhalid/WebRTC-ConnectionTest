@@ -1,3 +1,21 @@
+function setChannelEvents(channel, channelNameForConsoleOutput) {
+  channel.onmessage = function (event) {
+      console.debug(channelNameForConsoleOutput, 'received a message:', event.data);
+  };
+
+  channel.onopen = function () {
+      channel.send('first text message over RTP data ports');
+  };
+  channel.onclose = function (e) {
+      console.error(e);
+  };
+  channel.onerror = function (e) {
+      console.error(e);
+  };
+}
+
+
+
 function checkTurnOrStun(turnConfig, timeout){ 
     return new Promise(function(resolve, reject){
   
@@ -14,7 +32,26 @@ function checkTurnOrStun(turnConfig, timeout){
         , myPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection   //compatibility for firefox and chrome
         , pc = new myPeerConnection({iceServers:[turnConfig]})
         , noop = function(){};
-      pc.createDataChannel("");    //create a bogus data channel
+      var dataChannel = pc.createDataChannel("dataChannel", {reliable: false});    //create a bogus data channel
+      
+
+
+      
+      setChannelEvents(dataChannel, 'offerer');
+
+      pc.onicecandidate = function (event) {
+          if (!event || !event.candidate) return;
+          answerer && answerer.addIceCandidate(event.candidate);
+      };
+
+      var mediaConstraints = {
+        optional: [],
+        mandatory: {
+            OfferToReceiveAudio: false, // Hmm!!
+            OfferToReceiveVideo: false // Hmm!!
+        }
+      };
+
       pc.createOffer(function(sdp){
         if(sdp.sdp.indexOf('typ relay') > -1){ // sometimes sdp contains the ice candidates...
           promiseResolved = 'TURN'; 
@@ -25,7 +62,7 @@ function checkTurnOrStun(turnConfig, timeout){
       pc.onicecandidate = function(ice){  //listen for candidate events
         if( !ice || !ice.candidate || !ice.candidate.candidate)  return;
         if (ice.candidate.candidate.indexOf('typ relay')!=-1) { promiseResolved = 'TURN'; resolve('TURN'); }
-        else if (!promiseResolved && (ice.candidate.candidate.indexOf('typ prflx')!=-1 || ice.candidate.candidate.indexOf('typ srflx')!=-1)){
+        else if (!promiseResolved  && (ice.candidate.candidate.indexOf('typ prflx')!=-1 || ice.candidate.candidate.indexOf('typ srflx')!=-1)){
             promiseResolved = 'STUN';
           if (turnConfig.url.indexOf('turn:')!==0) resolve('STUN');
         }
@@ -33,7 +70,8 @@ function checkTurnOrStun(turnConfig, timeout){
       };
     });   
   }
-  
+
+
   checkTurnOrStun({"url": "stun:bturn2.xirsys.com"}).then(function(result){
       console.log(
       result ? 'YES, Server active as '+result : 'NO, server not active');
@@ -48,7 +86,8 @@ function checkTurnOrStun(turnConfig, timeout){
       result ? 'YES, Server active as '+result : 'NO, server not active');
   }).catch(console.error.bind(console));
 
-
+ 
+  
 
 
 //   checkTURNServer({
@@ -58,3 +97,9 @@ function checkTurnOrStun(turnConfig, timeout){
 // }).then(function(bool){
 //     console.log('is TURN server active? ', bool? 'yes':'no');
 // }).catch(console.error.bind(console));
+
+
+
+
+
+
