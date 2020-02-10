@@ -6,7 +6,11 @@
     <title>Document</title>
 </head>
 
-    <video autoplay playinline></video>
+    <div id="videoCanvas">
+        <video id="camera" autoplay></video>
+        <canvas id="photo"></canvas>
+      </div>
+    
     
     <div id="output"></div>
     <button id="testStun" onclick="start(this.id)">Test Stun</button>
