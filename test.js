@@ -184,13 +184,9 @@ function handleConnection(event) {
 }
 
 
-function setSessionDescriptionError(error){
+function setSessionDescriptionError(error){}
 
-}
-
-function setLocalDescriptionSuccess(des){
-
-}
+function setLocalDescriptionSuccess(des){}
 
 
 function createdOffer(description) {
@@ -328,6 +324,9 @@ function checkTurnOrStun(turnConfig, timeout){
   function preStart(){
     testTurn.disabled = false;
     testStun.disabled = false;
+
+    navigator.getUserMedia = ( navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.mediaDevices.getUserMedia);
+
     navigator.mediaDevices.getUserMedia(mediaStreamConstraints)
     .then(gotLocalMediaStream).catch(handleLocalMediaStreamError);
 
