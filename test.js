@@ -6,7 +6,9 @@ const turnServer = {
   };
 
 const mediaStreamConstraints = {
-  video: true,
+  video: {
+    facingMode: 'user'
+  },
   audio: true
 };
 
