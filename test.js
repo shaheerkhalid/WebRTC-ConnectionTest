@@ -13,6 +13,7 @@ const mediaStreamConstraints = {
 };
 
 let localStream;
+let dataChannel;
 
 var video = document.querySelector('video');
 var photo = document.getElementById('photo');
@@ -100,7 +101,7 @@ function grabWebCamVideo() {
 
 
 function createConnection() {
-  dataChannelSend.placeholder = '';
+  // dataChannelSend.placeholder = '';
   var servers = null;
   pcConstraint = null;
   dataConstraint = null;
@@ -138,8 +139,8 @@ function createConnection() {
 }
 
 function sendData() {
-  var data = dataChannelSend.value;
-  sendChannel.send(data);
+  // var data = dataChannelSend.value;
+  sendChannel.send('test');
   trace('Sent Data: ' + data);
 }
 
@@ -158,7 +159,7 @@ function gotLocalMediaStream(mediaStream) {
 // Handles error by logging a message to the console with the error message.
 function handleLocalMediaStreamError(error) {
   printInfo('navigator.getUserMedia error: '+ error);
-  testStun.disabled = true;
+  // testStun.disabled = true;
 }
 
 
@@ -325,8 +326,8 @@ function checkTurnOrStun(turnConfig, timeout){
   // }).catch(console.error.bind(console));
 
   function preStart(){
-    testTurn.disabled = true;
-    testStun.disabled = true;
+    testTurn.disabled = false;
+    testStun.disabled = false;
     navigator.mediaDevices.getUserMedia(mediaStreamConstraints)
     .then(gotLocalMediaStream).catch(handleLocalMediaStreamError);
 
