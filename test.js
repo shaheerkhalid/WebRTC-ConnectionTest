@@ -1,8 +1,8 @@
 const stunServer = {"url": "stun:bturn2.xirsys.com"};
 const turnServer = {
               url: 'turn:bturn2.xirsys.com:80?transport=udp',
-              username: 'ymms7Hxn1MyMr0YO5S3MM5BkwgARPkN6TxQOZiXRfrsFK2lRGQbLK8Qt4DHlGry7AAAAAF49v1hzaGFoZWVya2hhbGlk',
-              credential: 'fd212486-49e2-11ea-8456-9646de0e6ccd'
+              username: 'm0h2WOZ3byhxO5K9zsmpSLW8HbaSxp0Zx92F_rt4MYZFtmr1kq7gUjAUKOcwhC2_AAAAAF5Cudt0YWltb29y',
+              credential: 'a8124f9c-4cda-11ea-9866-9646de0e6ccd'
   };
 
 const mediaStreamConstraints = {
