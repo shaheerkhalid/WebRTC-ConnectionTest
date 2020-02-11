@@ -1,4 +1,4 @@
-const stunServer = {"url": "stun.l.google.com:19302"};
+const stunServer = {"url": "stun01.sipphone.com"};
 const turnServer = {
               url: 'turn:bturn2.xirsys.com:80?transport=udp',
               username: 'ymms7Hxn1MyMr0YO5S3MM5BkwgARPkN6TxQOZiXRfrsFK2lRGQbLK8Qt4DHlGry7AAAAAF49v1hzaGFoZWVya2hhbGlk',
