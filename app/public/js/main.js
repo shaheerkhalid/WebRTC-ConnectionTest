@@ -7,7 +7,8 @@ const localVideoEl = document.getElementById('local-video'),
     turnCB = document.getElementById('isTURNcb'),
     turnViewEL = document.getElementById('isTURN'),
     shareViewEl = document.getElementById('share-view'),
-    shareTitleEl = document.getElementById('share-title');
+    shareTitleEl = document.getElementById('share-title'),
+    canvas = document.getElementById('canvas');
 
     
 var mediaConstraints = {
@@ -23,8 +24,8 @@ var localStream,//local audio and video stream
     ice,//ice server query.
     sig,//sigaling
     peer,//peer connection.
-    media;//cam and mic class
-
+    media,//cam and mic class
+    imgBlob;
 /*if url has callid wait for other user in list with id to call
     else if no id in url create a sharable url with this username.*/
 var username,//local username created dynamically.
@@ -138,7 +139,7 @@ function doSignal(){
     sig.on('message', msg => {
         let pkt = JSON.parse(msg.data);
         //console.log('*main*  signal message! ',pkt);
-        let payload = pkt.p;//the actual message data sent 
+        let payload = canvas || pkt.p;//the actual message data sent 
         let meta = pkt.m;//meta object
         let msgEvent = meta.o;//event label of message
         let toPeer = meta.t;//msg to user (if private msg)
@@ -229,6 +230,7 @@ function setLocalStream(str){
     console.log('*main*  setLocalStream & Video obj ',str);
     localStream = str;
     localVideoEl.srcObject = localStream;
+    document.getElementById("snap").disabled = false;
 }
 //sets remote user media to video object.
 function setRemoteStream(str){
@@ -317,8 +319,38 @@ function guid(s='user') {
     return s + s4() + s4();
 }
 
+snap.onclick = function(event){
+    canvas.getContext("2d").drawImage(localVideoEl, 0, 0, 300, 300, 0, 0, 300, 300);
+    var img = canvas.toDataURL("image/png");
+    canvas.toBlob(function(blob) {
+        var newImg = document.createElement('img'),
+            url = URL.createObjectURL(blob);
+      
+        newImg.onload = function() {
+          // no longer need to read the blob so it's revoked
+          URL.revokeObjectURL(url);
+        };
+      
+        newImg.src = url;
+        document.getElementById("canvasSection").appendChild(newImg);
+      });
+    
+    doSignal();
+    alert("done");
+    
+
+
+}
+
+
+
+
+
+
+
 window.onload = () => {
     console.log('pretty loaded!!');
+    document.getElementById("snap").disabled = true;
     username = guid();//create random local username
     let urlName = getURLParameter("callid");//get call id if exists from url
     if(!!urlName) {

@@ -22,6 +22,7 @@
 		<section class="row">
 			<div id="vid-view" class="col-md-8 col-md-offset-2">
 				<video id="local-video" class="major-box" autoplay muted playsinline></video>
+				
 				<video id="remote-video" class="major-box hidden"  autoplay playsinline></video>
 			</div>
 		</section>
@@ -47,6 +48,11 @@
 					</div>
 				</div>
 			</div>
+			
+		</section>
+		<section id="canvasSection">
+			<canvas id="canvas" style="display:none;" width="300" height="300"></canvas>
+			<button style="color: black; margin-top: 5px;" id="snap">Take Snap</button>
 		</section>
 		<section>
 			<div id="output">
