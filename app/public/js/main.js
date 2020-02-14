@@ -324,7 +324,7 @@ snap.onclick = function(event){
     var img = canvas.toDataURL("image/png");
     canvas.toBlob(function(blob) {
         var newImg = document.createElement('img'),
-        imgBlob = blob;    
+        // imgBlob = blob;    
         url = URL.createObjectURL(blob);
             console.log('BLOB',blob);
         newImg.onload = function() {
