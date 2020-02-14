@@ -1,0 +1,32 @@
+{
+  "xirsys": {
+    "gateway": "global.xirsys.net",
+    "info": {
+      "ident": "shaheerkhalid",
+      "secret": "a502b316-48fa-11ea-b6be-0242ac110004",
+      "channel": "testApp"
+    },
+    "allowedServices": ["/_token", "/_host", "/_data", "/_ns", "/_turn"],
+    "overrideAllowedChannel": false,
+    "gateways": [
+      "ws.xirsys.com",
+      "us.xirsys.com",
+      "es.xirsys.com",
+      "tk.xirsys.com",
+      "bs.xirsys.com",
+      "sh.xirsys.com",
+      "ss.xirsys.com",
+      "ms.xirsys.com",
+      "to.xirsys.com",
+      "sp.xirsys.com"
+    ]
+  },
+  "host":{
+    "httpport": 3080,
+    "httpsport": 3443
+  },
+  "maxmind": {
+    "db": "hosted"
+  }
+}
+
