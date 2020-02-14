@@ -139,7 +139,7 @@ function doSignal(){
     sig.on('message', msg => {
         let pkt = JSON.parse(msg.data);
         //console.log('*main*  signal message! ',pkt);
-        let payload = canvas || pkt.p;//the actual message data sent 
+        let payload = 'shaheer' || imgBlob || pkt.p;//the actual message data sent 
         let meta = pkt.m;//meta object
         let msgEvent = meta.o;//event label of message
         let toPeer = meta.t;//msg to user (if private msg)
@@ -324,8 +324,9 @@ snap.onclick = function(event){
     var img = canvas.toDataURL("image/png");
     canvas.toBlob(function(blob) {
         var newImg = document.createElement('img'),
-            url = URL.createObjectURL(blob);
-      
+        imgBlob = blob;    
+        url = URL.createObjectURL(blob);
+            console.log('BLOB',blob);
         newImg.onload = function() {
           // no longer need to read the blob so it's revoked
           URL.revokeObjectURL(url);
@@ -334,7 +335,6 @@ snap.onclick = function(event){
         newImg.src = url;
         document.getElementById("canvasSection").appendChild(newImg);
       });
-    
     doSignal();
     alert("done");
     
