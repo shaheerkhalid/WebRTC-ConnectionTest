@@ -138,7 +138,7 @@ function doSignal(){
     sig.on('message', msg => {
         let pkt = JSON.parse(msg.data);
         //console.log('*main*  signal message! ',pkt);
-        let payload = 'testmsg';//pkt.p;//the actual message data sent 
+        let payload = pkt.p;//the actual message data sent 
         let meta = pkt.m;//meta object
         let msgEvent = meta.o;//event label of message
         let toPeer = meta.t;//msg to user (if private msg)
