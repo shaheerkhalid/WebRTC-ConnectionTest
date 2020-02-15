@@ -362,7 +362,7 @@ window.onload = () => {
     } // if call id does not exist this is the callee
     else {
         //callIdEl.innerHTML = location.origin + location.pathname + '?callid='+username;
-        callIdEl.value = location.origin + location.pathname + '?callid='+username;
+        // callIdEl.value = location.origin + location.pathname + '?callid='+username;
 
         $(turnCB).on('click', evt => {
             //console.log('TURN: ',evt);
