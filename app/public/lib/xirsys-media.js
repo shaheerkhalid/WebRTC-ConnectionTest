@@ -49,6 +49,7 @@ _md.prototype.getUserMedia = function(constraints,cbSuccess,cbFail){
     if(!constraints) constraints = {audio:true,video:true};
     //return promise
     var own = this;
+    navigator.getUserMedia = ( navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.mediaDevices.getUserMedia);
     return navigator.mediaDevices.getUserMedia(constraints)
         .then( str => {
             own.localStream = str;

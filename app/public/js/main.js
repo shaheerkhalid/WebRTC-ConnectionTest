@@ -138,11 +138,11 @@ function doSignal(){
     sig = new $xirsys.signal( '/webrtc', username,{channel:channelPath} );
     sig.on('message', msg => {
         let pkt = JSON.parse(msg.data);
-        //console.log('*main*  signal message! ',pkt);
-        let payload = 'shaheer' || imgBlob || pkt.p;//the actual message data sent 
-        let meta = pkt.m;//meta object
+        console.log('*main*  signal message! ',pkt);
+        let payload = 'shaheer';// || imgBlob || pkt.p;//the actual message data sent 
+        let meta = 'shaheer'//pkt.m;//meta object
         let msgEvent = meta.o;//event label of message
-        let toPeer = meta.t;//msg to user (if private msg)
+        let toPeer = 'shaheer';// || meta.t;//msg to user (if private msg)
         let fromPeer = meta.f;//msg from user
         //remove the peer path to display just the name not path.
         if(!!fromPeer) {
@@ -184,7 +184,7 @@ function doSignal(){
 function onReady(){
     console.log('* onReady!');
     // setup peer connector, pass signal, our media and iceServers list.
-    let isTURN = getURLParameter("isTURN") == 'true';//get force turn var.
+    let isTURN = true;//getURLParameter("isTURN") == 'true';//get force turn var.
     console.log('isTURN ',isTURN);
     peer = new $xirsys.p2p(sig,localStream,(!ice ? {} : {iceServers:ice.iceServers}), {forceTurn:isTURN});
     //add listener when a call is started.
@@ -343,6 +343,9 @@ snap.onclick = function(event){
 }
 
 
+function test(){
+
+}
 
 
 
