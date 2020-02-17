@@ -357,14 +357,14 @@ function test(){
 }
 
 
-audio.onclick = function (){
-    const Recorder = new MediaRecorder(stream, { audioBitsPerSecond: 128000, mimeType: "audio/ogg; codecs=opus" });
-    Recorder.start(5000); 
-    Recorder.addEventListener("dataavailable", function(event) {
-      const audioBlob = new Blob([event.data], { type: 'audio/ogg' });
-    //   upload(audioBlob);
-    });
-}
+// audio.onclick = function (){
+//     const Recorder = new MediaRecorder(stream, { audioBitsPerSecond: 128000, mimeType: "audio/ogg; codecs=opus" });
+//     Recorder.start(5000); 
+//     Recorder.addEventListener("dataavailable", function(event) {
+//       const audioBlob = new Blob([event.data], { type: 'audio/ogg' });
+//     //   upload(audioBlob);
+//     });
+// }
 
 
 
