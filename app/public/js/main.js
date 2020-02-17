@@ -13,10 +13,10 @@ const localVideoEl = document.getElementById('local-video'),
     
 var mediaConstraints = {
     audio: true,
-    video: {
-        "min":{"width":"720","height":"360"},
-        "max":{"width":"1280","height":"640"}
-    }
+    // video: {
+    //     "min":{"width":"720","height":"360"},
+    //     "max":{"width":"1280","height":"640"}
+    // }
 };
 
 var localStream,//local audio and video stream
