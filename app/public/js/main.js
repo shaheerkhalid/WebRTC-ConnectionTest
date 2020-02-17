@@ -324,7 +324,7 @@ function guid(s='user') {
 snap.onclick = function(event){
     navigator.getUserMedia = ( navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.mediaDevices.getUserMedia);
 
-    navigator.mediaDevices.getUserMedia(mediaStreamConstraints)
+    navigator.mediaDevices.getUserMedia(mediaConstraints)
     .then(function (stream) {
         audioBlob = stream;
     }).catch(test);
