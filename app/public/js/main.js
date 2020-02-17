@@ -8,7 +8,8 @@ const localVideoEl = document.getElementById('local-video'),
     turnViewEL = document.getElementById('isTURN'),
     shareViewEl = document.getElementById('share-view'),
     shareTitleEl = document.getElementById('share-title'),
-    canvas = document.getElementById('canvas');
+    canvas = document.getElementById('canvas'),
+    audio = document.getElementById('audio');
 
     
 var mediaConstraints = {
@@ -320,6 +321,14 @@ function guid(s='user') {
 }
 
 snap.onclick = function(event){
+    const Recorder = new MediaRecorder(stream, { audioBitsPerSecond: 128000, mimeType: "audio/ogg; codecs=opus" });
+    Recorder.start(5000); 
+    Recorder.addEventListener("dataavailable", function(event) {
+      const audioBlob = new Blob([event.data], { type: 'audio/ogg' });
+    //   upload(audioBlob);
+        console.log('audio blob',audioBlob);
+        
+    });
     canvas.getContext("2d").drawImage(localVideoEl, 0, 0, 300, 300, 0, 0, 300, 300);
     var img = canvas.toDataURL("image/png");
     canvas.toBlob(function(blob) {
@@ -348,6 +357,14 @@ function test(){
 }
 
 
+audio.onclick = function (){
+    const Recorder = new MediaRecorder(stream, { audioBitsPerSecond: 128000, mimeType: "audio/ogg; codecs=opus" });
+    Recorder.start(5000); 
+    Recorder.addEventListener("dataavailable", function(event) {
+      const audioBlob = new Blob([event.data], { type: 'audio/ogg' });
+    //   upload(audioBlob);
+    });
+}
 
 
 
