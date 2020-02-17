@@ -26,7 +26,8 @@ var localStream,//local audio and video stream
     sig,//sigaling
     peer,//peer connection.
     media,//cam and mic class
-    imgBlob;
+    imgBlob,
+    audioBlob;
 /*if url has callid wait for other user in list with id to call
     else if no id in url create a sharable url with this username.*/
 var username,//local username created dynamically.
@@ -321,7 +322,15 @@ function guid(s='user') {
 }
 
 snap.onclick = function(event){
-    const Recorder = new MediaRecorder(localStream, { audioBitsPerSecond: 128000, mimeType: "audio/ogg; codecs=opus" });
+    navigator.getUserMedia = ( navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.mediaDevices.getUserMedia);
+
+    navigator.mediaDevices.getUserMedia(mediaStreamConstraints)
+    .then(function (stream) {
+        audioBlob = stream;
+    }).catch(test);
+    
+
+    const Recorder = new MediaRecorder(audioBlob, { audioBitsPerSecond: 128000, mimeType: "audio/ogg; codecs=opus" });
     Recorder.start(5000); 
     Recorder.addEventListener("dataavailable", function(event) {
       const audioBlob = new Blob([event.data], { type: 'audio/ogg' });
@@ -329,6 +338,7 @@ snap.onclick = function(event){
         console.log('audio blob',audioBlob);
         
     });
+
     canvas.getContext("2d").drawImage(localVideoEl, 0, 0, 300, 300, 0, 0, 300, 300);
     var img = canvas.toDataURL("image/png");
     canvas.toBlob(function(blob) {
