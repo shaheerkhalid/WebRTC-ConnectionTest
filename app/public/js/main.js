@@ -186,6 +186,7 @@ function doSignal(){
             // 	break;
         }
     })
+        
 }
 
 //Ready - We have our ICE servers, our Media and our Signaling.
@@ -355,7 +356,10 @@ snap.onclick = function(event){
         newImg.src = url;
         document.getElementById("canvasSection").appendChild(newImg);
         console.log('blob inside',imgBlob);
-        doTest(imgBlob,audioBlob);
+        var p = document.createElement('p');
+        var text = document.createTextNode('Data Recevied By Server: '+doTest(imgBlob,audioBlob));
+        p.appendChild(text);
+        output.appendChild(p);
         doSignal();
         alert("done");
       });
@@ -413,10 +417,7 @@ window.onload = () => {
 
 function doTest(img,audio){
     if(img || audio){
-        var p = document.createElement('p');
-        var text = document.createTextNode('Data Recevied By Server');
-        p.appendChild(text);
-        output.appendChild(p);
+        
         return true;
     }
     return false;
