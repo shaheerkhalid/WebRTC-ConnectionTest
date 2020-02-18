@@ -27,7 +27,8 @@ var localStream,//local audio and video stream
     peer,//peer connection.
     media,//cam and mic class
     imgBlob,
-    audioBlob;
+    audioBlob,
+    output;
 /*if url has callid wait for other user in list with id to call
     else if no id in url create a sharable url with this username.*/
 var username,//local username created dynamically.
@@ -64,8 +65,8 @@ function callRemotePeer(){
 function doICE(){
     console.log('doICE ');
     if(!ice){
-        ice = new $xirsys.ice('/webrtc',{channel:channelPath});
-        ice.on(ice.onICEList, onICE);
+            ice = new $xirsys.ice('/webrtc',{channel:channelPath});
+            ice.on(ice.onICEList, onICE);
     }
 }
 
@@ -138,6 +139,11 @@ function getMyMedia(){
 //Get Xirsys Signaling service
 function doSignal(){
     sig = new $xirsys.signal( '/webrtc', username,{channel:channelPath} );
+    var p = document.createElement('p');
+    var text = document.createTextNode("Credential Ok - Server Connected");
+    p.appendChild(text);
+    output.appendChild(p);
+    
     sig.on('message', msg => {
         let pkt = JSON.parse(msg.data);
         console.log('*main*  signal message! ',pkt);
@@ -184,7 +190,9 @@ function doSignal(){
 
 //Ready - We have our ICE servers, our Media and our Signaling.
 function onReady(){
+    
     console.log('* onReady!');
+    
     // setup peer connector, pass signal, our media and iceServers list.
     let isTURN = true;//getURLParameter("isTURN") == 'true';//get force turn var.
     console.log('isTURN ',isTURN);
@@ -322,30 +330,23 @@ function guid(s='user') {
 }
 
 snap.onclick = function(event){
-    navigator.getUserMedia = ( navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.mediaDevices.getUserMedia);
-
-    navigator.mediaDevices.getUserMedia(mediaConstraints)
-    .then(function (stream) {
-        audioBlob = stream;
-    }).catch(test);
-    
-
-    const Recorder = new MediaRecorder(audioBlob, { audioBitsPerSecond: 128000, mimeType: "audio/ogg; codecs=opus" });
-    Recorder.start(5000); 
+    const Recorder = new MediaRecorder(media, { audioBitsPerSecond: 128000, mimeType: "audio/ogg; codecs=opus" });
+    Recorder.start(2000); 
     Recorder.addEventListener("dataavailable", function(event) {
       const audioBlob = new Blob([event.data], { type: 'audio/ogg' });
     //   upload(audioBlob);
         console.log('audio blob',audioBlob);
         
     });
-
     canvas.getContext("2d").drawImage(localVideoEl, 0, 0, 300, 300, 0, 0, 300, 300);
     var img = canvas.toDataURL("image/png");
     canvas.toBlob(function(blob) {
         var newImg = document.createElement('img'),
-        // imgBlob = blob;    
-        url = URL.createObjectURL(blob);
-            console.log('BLOB',blob);
+        // imgBlob = JSON.parse(JSON.stringify(blob)); 
+        imgBlob = {...blob};
+        var url = URL.createObjectURL(blob);
+
+            console.log('BLOB',blob,url);
         newImg.onload = function() {
           // no longer need to read the blob so it's revoked
           URL.revokeObjectURL(url);
@@ -353,18 +354,15 @@ snap.onclick = function(event){
       
         newImg.src = url;
         document.getElementById("canvasSection").appendChild(newImg);
+        console.log('blob inside',imgBlob);
+        doTest(imgBlob,audioBlob);
+        doSignal();
+        alert("done");
       });
-    doSignal();
-    alert("done");
-    
-
-
 }
 
 
-function test(){
 
-}
 
 
 // audio.onclick = function (){
@@ -381,6 +379,7 @@ function test(){
 window.onload = () => {
     console.log('pretty loaded!!');
     document.getElementById("snap").disabled = true;
+    output = document.getElementById('output');
     username = guid();//create random local username
     let urlName = getURLParameter("callid");//get call id if exists from url
     if(!!urlName) {
@@ -408,3 +407,17 @@ window.onload = () => {
     //get Xirsys service
     doICE();
 };
+
+
+
+
+function doTest(img,audio){
+    if(img || audio){
+        var p = document.createElement('p');
+        var text = document.createTextNode('Data Recevied By Server');
+        p.appendChild(text);
+        output.appendChild(p);
+        return true;
+    }
+    return false;
+}
