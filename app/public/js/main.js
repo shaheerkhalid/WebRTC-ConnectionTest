@@ -330,14 +330,14 @@ function guid(s='user') {
 }
 
 snap.onclick = function(event){
-    const Recorder = new MediaRecorder(media, { audioBitsPerSecond: 128000, mimeType: "audio/ogg; codecs=opus" });
-    Recorder.start(2000); 
-    Recorder.addEventListener("dataavailable", function(event) {
-      const audioBlob = new Blob([event.data], { type: 'audio/ogg' });
-    //   upload(audioBlob);
-        console.log('audio blob',audioBlob);
+    // const Recorder = new MediaRecorder(media, { audioBitsPerSecond: 128000, mimeType: "audio/ogg; codecs=opus" });
+    // Recorder.start(2000); 
+    // Recorder.addEventListener("dataavailable", function(event) {
+    //   const audioBlob = new Blob([event.data], { type: 'audio/ogg' });
+    // //   upload(audioBlob);
+    //     console.log('audio blob',audioBlob);
         
-    });
+    // });
     canvas.getContext("2d").drawImage(localVideoEl, 0, 0, 300, 300, 0, 0, 300, 300);
     var img = canvas.toDataURL("image/png");
     canvas.toBlob(function(blob) {
