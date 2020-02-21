@@ -191,9 +191,11 @@ function onStartCall(evt){
     if(remoteVideoEl.classList.contains('hidden')){
         remoteVideoEl.classList.remove('hidden');
     }
-    shareTitleEl.innerHTML = 'In call with user:';
+    
     remoteCallID = remoteId;
     inCall = true;
+    shareTitleEl.innerHTML = 'In call with user: '+inCall;
+
 }
 
 function onStopCall() {
