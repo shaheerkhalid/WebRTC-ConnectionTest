@@ -1,7 +1,7 @@
 {
-  "name": "test",
+  "name": "Xirsys",
   "version": "1.2.0",
-  "description": "",
+  "description": "Xirsys Examples for V3 API",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -11,7 +11,7 @@
   },
   "repository": {},
   "keywords": [],
-  "author": "",
+  "author": "Xirsys",
   "license": "MIT",
   "bugs": {},
   "dependencies": {

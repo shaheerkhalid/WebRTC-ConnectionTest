@@ -66,7 +66,6 @@ _ice.prototype.doICE = function (ident,secret) {
 
 //check for depricated RTCIceServer "url" property, needs to be "urls" now.
 _ice.prototype.filterPaths = function(arr){
-        
     var l = arr.length, i;
     var a = [];
     for(i=0; i<l; i++){

@@ -49,9 +49,6 @@ _md.prototype.getUserMedia = function(constraints,cbSuccess,cbFail){
     if(!constraints) constraints = {audio:true,video:true};
     //return promise
     var own = this;
-    navigator.getUserMedia = ( navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.mediaDevices.getUserMedia);
-    console.log('user media 1',navigator.getUserMedia);
-    
     return navigator.mediaDevices.getUserMedia(constraints)
         .then( str => {
             own.localStream = str;
@@ -65,13 +62,11 @@ _md.prototype.getUserMedia = function(constraints,cbSuccess,cbFail){
 };
 
 _md.prototype.getLocalDevices = function(){
-    navigator.getUserMedia = ( navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.mediaDevices.getUserMedia);
     if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
         console.log("Error: Could not get list of media devices!  This might not be supported by this browser.");
         return;
     }
     let d = navigator.mediaDevices.enumerateDevices();
-    console.log('user media 2',d);
     return d;
 }
 

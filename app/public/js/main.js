@@ -7,10 +7,7 @@ const localVideoEl = document.getElementById('local-video'),
     turnCB = document.getElementById('isTURNcb'),
     turnViewEL = document.getElementById('isTURN'),
     shareViewEl = document.getElementById('share-view'),
-    shareTitleEl = document.getElementById('share-title'),
-    canvas = document.getElementById('canvas'),
-    audio = document.getElementById('audio');
-
+    shareTitleEl = document.getElementById('share-title');
     
 var mediaConstraints = {
     audio: true,
@@ -25,10 +22,8 @@ var localStream,//local audio and video stream
     ice,//ice server query.
     sig,//sigaling
     peer,//peer connection.
-    media,//cam and mic class
-    imgBlob,
-    audioBlob,
-    output;
+    media;//cam and mic class
+
 /*if url has callid wait for other user in list with id to call
     else if no id in url create a sharable url with this username.*/
 var username,//local username created dynamically.
@@ -40,15 +35,6 @@ var username,//local username created dynamically.
 var ch = decodeURI( (RegExp('ch' + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1] );
 if(ch != 'null' ) channelPath = ch;
 console.log('channel path: ',channelPath);
-
-
-// var console = {};
-// console.log = function(text){
-//     var node = document.createElement("p");                 // Create a <p> node
-//     var textnode = document.createTextNode(text);         // Create a text node
-//     node.appendChild(textnode);                              // Append the text to <p>
-//     output.appendChild(node);                             // Append <p> to <div> with id="output"
-// }
 
 //if there is no remoteCallID show sharable link to call user.
 
@@ -65,8 +51,8 @@ function callRemotePeer(){
 function doICE(){
     console.log('doICE ');
     if(!ice){
-            ice = new $xirsys.ice('/webrtc',{channel:channelPath});
-            ice.on(ice.onICEList, onICE);
+        ice = new $xirsys.ice('/webrtc',{channel:channelPath});
+        ice.on(ice.onICEList, onICE);
     }
 }
 
@@ -139,18 +125,13 @@ function getMyMedia(){
 //Get Xirsys Signaling service
 function doSignal(){
     sig = new $xirsys.signal( '/webrtc', username,{channel:channelPath} );
-    var p = document.createElement('p');
-    var text = document.createTextNode("Credential Ok - Server Connected");
-    p.appendChild(text);
-    output.appendChild(p);
-    
     sig.on('message', msg => {
         let pkt = JSON.parse(msg.data);
-        console.log('*main*  signal message! ',pkt);
-        let payload = 'shaheer';// || imgBlob || pkt.p;//the actual message data sent 
-        let meta = 'shaheer'//pkt.m;//meta object
+        //console.log('*main*  signal message! ',pkt);
+        let payload = pkt.p;//the actual message data sent 
+        let meta = pkt.m;//meta object
         let msgEvent = meta.o;//event label of message
-        let toPeer = 'shaheer';// || meta.t;//msg to user (if private msg)
+        let toPeer = meta.t;//msg to user (if private msg)
         let fromPeer = meta.f;//msg from user
         //remove the peer path to display just the name not path.
         if(!!fromPeer) {
@@ -186,16 +167,13 @@ function doSignal(){
             // 	break;
         }
     })
-        
 }
 
 //Ready - We have our ICE servers, our Media and our Signaling.
 function onReady(){
-    
     console.log('* onReady!');
-    
     // setup peer connector, pass signal, our media and iceServers list.
-    let isTURN = true;//getURLParameter("isTURN") == 'true';//get force turn var.
+    let isTURN = getURLParameter("isTURN") == 'true';//get force turn var.
     console.log('isTURN ',isTURN);
     peer = new $xirsys.p2p(sig,localStream,(!ice ? {} : {iceServers:ice.iceServers}), {forceTurn:isTURN});
     //add listener when a call is started.
@@ -241,7 +219,6 @@ function setLocalStream(str){
     console.log('*main*  setLocalStream & Video obj ',str);
     localStream = str;
     localVideoEl.srcObject = localStream;
-    document.getElementById("snap").disabled = false;
 }
 //sets remote user media to video object.
 function setRemoteStream(str){
@@ -330,60 +307,8 @@ function guid(s='user') {
     return s + s4() + s4();
 }
 
-snap.onclick = function(event){
-    // const Recorder = new MediaRecorder(media, { audioBitsPerSecond: 128000, mimeType: "audio/ogg; codecs=opus" });
-    // Recorder.start(2000); 
-    // Recorder.addEventListener("dataavailable", function(event) {
-    //   const audioBlob = new Blob([event.data], { type: 'audio/ogg' });
-    // //   upload(audioBlob);
-    //     console.log('audio blob',audioBlob);
-        
-    // });
-    canvas.getContext("2d").drawImage(localVideoEl, 0, 0, 300, 300, 0, 0, 300, 300);
-    var img = canvas.toDataURL("image/png");
-    canvas.toBlob(function(blob) {
-        var newImg = document.createElement('img'),
-        // imgBlob = JSON.parse(JSON.stringify(blob)); 
-        imgBlob = {...blob};
-        var url = URL.createObjectURL(blob);
-
-            console.log('BLOB',blob,url);
-        newImg.onload = function() {
-          // no longer need to read the blob so it's revoked
-          URL.revokeObjectURL(url);
-        };
-      
-        newImg.src = url;
-        document.getElementById("canvasSection").appendChild(newImg);
-        console.log('blob inside',imgBlob);
-        var p = document.createElement('p');
-        var text = document.createTextNode('Data Recevied By Server: '+doTest(imgBlob,audioBlob));
-        p.appendChild(text);
-        output.appendChild(p);
-        doSignal();
-        alert("done");
-      });
-}
-
-
-
-
-
-// audio.onclick = function (){
-//     const Recorder = new MediaRecorder(stream, { audioBitsPerSecond: 128000, mimeType: "audio/ogg; codecs=opus" });
-//     Recorder.start(5000); 
-//     Recorder.addEventListener("dataavailable", function(event) {
-//       const audioBlob = new Blob([event.data], { type: 'audio/ogg' });
-//     //   upload(audioBlob);
-//     });
-// }
-
-
-
 window.onload = () => {
     console.log('pretty loaded!!');
-    document.getElementById("snap").disabled = true;
-    output = document.getElementById('output');
     username = guid();//create random local username
     let urlName = getURLParameter("callid");//get call id if exists from url
     if(!!urlName) {
@@ -395,7 +320,7 @@ window.onload = () => {
     } // if call id does not exist this is the callee
     else {
         //callIdEl.innerHTML = location.origin + location.pathname + '?callid='+username;
-        // callIdEl.value = location.origin + location.pathname + '?callid='+username;
+        callIdEl.value = location.origin + location.pathname + '?callid='+username;
 
         $(turnCB).on('click', evt => {
             //console.log('TURN: ',evt);
@@ -411,14 +336,3 @@ window.onload = () => {
     //get Xirsys service
     doICE();
 };
-
-
-
-
-function doTest(img,audio){
-    if(img || audio){
-        
-        return true;
-    }
-    return false;
-}
